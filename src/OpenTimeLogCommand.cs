@@ -9,7 +9,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SolutionTimeLog
 {
-    internal sealed class OpenTimeLog
+    internal sealed class OpenTimeLogCommand
     {
         public const int CommandId = 0x0100;
 
@@ -17,7 +17,7 @@ namespace SolutionTimeLog
 
         private readonly AsyncPackage package;
 
-        private OpenTimeLog(AsyncPackage package, OleMenuCommandService commandService)
+        private OpenTimeLogCommand(AsyncPackage package, OleMenuCommandService commandService)
         {
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -27,7 +27,7 @@ namespace SolutionTimeLog
             commandService.AddCommand(menuItem);
         }
 
-        public static OpenTimeLog Instance
+        public static OpenTimeLogCommand Instance
         {
             get;
             private set;
@@ -46,7 +46,7 @@ namespace SolutionTimeLog
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
             OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-            Instance = new OpenTimeLog(package, commandService);
+            Instance = new OpenTimeLogCommand(package, commandService);
         }
 
         private void Execute(object sender, EventArgs e)

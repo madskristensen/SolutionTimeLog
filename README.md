@@ -9,7 +9,7 @@ or get the [CI build](https://www.vsixgallery.com/extension/SolutionTimeLog.b8e3
 
 ----------------------------------------------
 
-Coming soon...
+As shown on the YouTube episode of [Writing VS Extensions with Mads - Log time spent in solution](https://www.youtube.com/watch?v=iPf2oyJbADE)
 
 ## License
 [Apache 2.0](LICENSE)
