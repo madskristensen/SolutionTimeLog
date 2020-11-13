@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+  <Include href="KnownImageIds.vsct"/>
+
+  <Commands package="TimeLogPackage">
+    <Groups>
+      <Group guid="TimeLogCmdSet" id="MyMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="TimeLogCmdSet" id="OpenTimeLogId" priority="0x0100" type="Button">
+        <Parent guid="TimeLogCmdSet" id="MyMenuGroup" />
+        <Icon guid="ImageCatalogGuid" id="Timer" />
+        <Strings>
+          <ButtonText>Invoke OpenTimeLog</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <Symbols>
+    <GuidSymbol name="TimeLogPackage" value="{90e7ce37-4df0-4eba-a451-9094e275bcaa}" />
+
+    <GuidSymbol name="TimeLogCmdSet" value="{0f4b81c2-20ef-458e-8038-e1eecb90a0ee}">
+      <IDSymbol name="MyMenuGroup" value="0x1020" />
+      <IDSymbol name="OpenTimeLogId" value="0x0100" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>
