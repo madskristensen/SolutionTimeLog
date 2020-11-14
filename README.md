@@ -4,8 +4,7 @@
 
 A collection of minor fixes and tweaks for Visual Studio to reduce the paper cuts and make you a happier developer
 
-Download this extension from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.SolutionTimeLog)
-or get the [CI build](https://www.vsixgallery.com/extension/SolutionTimeLog.b8e308cf-180b-43da-98af-7054b0af86dd).
+Download this extension from the [Open VSIX Gallery](https://www.vsixgallery.com/extension/SolutionTimeLog.b8e308cf-180b-43da-98af-7054b0af86dd).
 
 ----------------------------------------------
 
