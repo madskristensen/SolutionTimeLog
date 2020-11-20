@@ -8,27 +8,39 @@
   <Commands package="TimeLogPackage">
     <Groups>
       <Group guid="TimeLogCmdSet" id="MyMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_VIEW"/>
       </Group>
     </Groups>
 
     <Buttons>
-      <Button guid="TimeLogCmdSet" id="OpenTimeLogId" priority="0x0100" type="Button">
+      <Button guid="TimeLogCmdSet" id="OpenTimeLog" priority="0x0100" type="Button">
         <Parent guid="TimeLogCmdSet" id="MyMenuGroup" />
         <Icon guid="ImageCatalogGuid" id="Timer" />
+        <CommandFlag>IconIsMoniker</CommandFlag>
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <ButtonText>Invoke OpenTimeLog</ButtonText>
+          <ButtonText>Time Log</ButtonText>
+          <LocCanonicalName>.TimeLog</LocCanonicalName>
         </Strings>
       </Button>
     </Buttons>
   </Commands>
+
+  <KeyBindings>
+    <KeyBinding guid="TimeLogCmdSet" id="OpenTimeLog" editor="guidVSStd97" key1="VK_F11" mod1="Control Shift" />
+  </KeyBindings>
+
+  <VisibilityConstraints>
+    <VisibilityItem guid="TimeLogCmdSet" id="OpenTimeLog" context="UICONTEXT_SolutionHasMultipleProjects" />
+    <VisibilityItem guid="TimeLogCmdSet" id="OpenTimeLog" context="UICONTEXT_SolutionHasSingleProject" />
+  </VisibilityConstraints>
 
   <Symbols>
     <GuidSymbol name="TimeLogPackage" value="{90e7ce37-4df0-4eba-a451-9094e275bcaa}" />
 
     <GuidSymbol name="TimeLogCmdSet" value="{0f4b81c2-20ef-458e-8038-e1eecb90a0ee}">
       <IDSymbol name="MyMenuGroup" value="0x1020" />
-      <IDSymbol name="OpenTimeLogId" value="0x0100" />
+      <IDSymbol name="OpenTimeLog" value="0x0100" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

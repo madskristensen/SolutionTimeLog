@@ -17,15 +17,21 @@ namespace SolutionTimeLog
     [Guid(PackageGuids.TimeLogPackageString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionOpening_string, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideService(typeof(TimeLog), ServiceName = nameof(TimeLog), IsAsyncQueryable = true)]
     public sealed class SolutionTimeLogPackage : AsyncPackage
     {
-        private static readonly TimeSpan _interval = TimeSpan.FromSeconds(60);
+        private static readonly TimeSpan _interval = TimeSpan.FromSeconds(2);
         private Timer _timer;
         private TimeLog _log;
+        private IVsSolution _solService;
 
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
+            _solService = await GetServiceAsync(typeof(SVsSolution)) as IVsSolution;
+            AddService(typeof(TimeLog), new AsyncServiceCreatorCallback(CreateServiceAsync), false);
+
             await OpenTimeLogCommand.InitializeAsync(this);
 
             var isSolutionLoaded = await IsSolutionLoadedAsync();
@@ -39,6 +45,16 @@ namespace SolutionTimeLog
             SolutionEvents.OnAfterCloseSolution += OnAfterCloseSolution;
             Application.Current.Activated += (s, e) => _timer.Enabled = true;
             Application.Current.Deactivated += (s, e) => _timer.Enabled = false;
+        }
+
+        private Task<object> CreateServiceAsync(IAsyncServiceContainer container, CancellationToken token, Type type)
+        {
+            if (type == typeof(TimeLog))
+            {
+                return Task.FromResult<object>(new TimeLog(_solService));
+            }
+
+            return null;
         }
 
         private async Task<bool> IsSolutionLoadedAsync()

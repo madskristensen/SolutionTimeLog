@@ -24,6 +24,6 @@ namespace SolutionTimeLog
     internal sealed partial class PackageIds
     {
         public const int MyMenuGroup = 0x1020;
-        public const int OpenTimeLogId = 0x0100;
+        public const int OpenTimeLog = 0x0100;
     }
 }

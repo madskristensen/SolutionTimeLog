@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
@@ -11,54 +9,26 @@ namespace SolutionTimeLog
 {
     internal sealed class OpenTimeLogCommand
     {
-        public const int CommandId = 0x0100;
-
-        public static readonly Guid CommandSet = new Guid("0f4b81c2-20ef-458e-8038-e1eecb90a0ee");
-
-        private readonly AsyncPackage package;
-
-        private OpenTimeLogCommand(AsyncPackage package, OleMenuCommandService commandService)
-        {
-            this.package = package ?? throw new ArgumentNullException(nameof(package));
-            commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-
-            var menuCommandID = new CommandID(CommandSet, CommandId);
-            var menuItem = new MenuCommand(this.Execute, menuCommandID);
-            commandService.AddCommand(menuItem);
-        }
-
-        public static OpenTimeLogCommand Instance
-        {
-            get;
-            private set;
-        }
-
-        private Microsoft.VisualStudio.Shell.IAsyncServiceProvider ServiceProvider
-        {
-            get
-            {
-                return this.package;
-            }
-        }
-
         public static async Task InitializeAsync(AsyncPackage package)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
-            OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-            Instance = new OpenTimeLogCommand(package, commandService);
+            TimeLog log = await package.GetServiceAsync<TimeLog, TimeLog>();
+
+            OleMenuCommandService commandService = await package.GetServiceAsync<IMenuCommandService, OleMenuCommandService>();
+            var menuCommandID = new CommandID(PackageGuids.TimeLogCmdSet, PackageIds.OpenTimeLog);
+            var menuItem = new OleMenuCommand((s, e) => ExecuteAsync(package, log).ConfigureAwait(false), menuCommandID, false);
+            commandService.AddCommand(menuItem);
         }
 
-        private void Execute(object sender, EventArgs e)
+        private static async Task ExecuteAsync(AsyncPackage package, TimeLog log)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-            string title = "OpenTimeLog";
+            TimeSpan time = await log.ReadAsync();
 
             VsShellUtilities.ShowMessageBox(
-                this.package,
-                message,
-                title,
+                package,
+                $"This solution has been open for {time.TotalMinutes} minutes",
+                nameof(TimeLog),
                 OLEMSGICON.OLEMSGICON_INFO,
                 OLEMSGBUTTON.OLEMSGBUTTON_OK,
                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);

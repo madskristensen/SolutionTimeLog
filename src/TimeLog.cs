@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Shell;
@@ -8,6 +9,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SolutionTimeLog
 {
+    [Guid("eca9d054-bbfc-48a5-b1bf-75d48ad7c3ac")]
     public class TimeLog
     {
         private readonly IVsSolution _solService;
@@ -52,7 +54,7 @@ namespace SolutionTimeLog
             }
         }
 
-        private async Task<TimeSpan> ReadAsync()
+        public async Task<TimeSpan> ReadAsync()
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             _solService.GetProperty((int)__VSPROPID.VSPROPID_SolutionBaseName, out var solution);
